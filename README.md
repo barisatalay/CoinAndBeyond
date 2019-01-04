@@ -39,9 +39,12 @@ val myObject = CoinAndBeyond(BtcTurk(), this, this)
 //For Sistem Koin market
 val myObject = CoinAndBeyond(SistemKoin(), this, this)
 
-//If you want to apply coin filter 
-//If you do not use the following code, the whole list will appear.
+//The coin list that will be returned from the "getCoins" method is filtered according to the list you provided here.
+//NOTE: If you submit a blank list, they are all listed.
 myObject.setCoinFilter(arrayOf(enmCoin.BTC, enmCoin.XRP, etc.))
+
+//EN: Returns the coins published by the dataset(the Web Site) you are trying to use
+myObject.getAvailableCoins()
 
 myObject.getCoins(Observer {response->
   //use this object "response"

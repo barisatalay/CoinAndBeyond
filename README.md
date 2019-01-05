@@ -4,7 +4,7 @@
 Turkish Bitcoin stock market library
 
 # Market List: 
-BtcTurk, Koineks, Paribu, SistemKoin
+BtcTurk Api, Koineks Api, Paribu Api, SistemKoin Api
 
 # Whos uses this library?
 For now, no one :)

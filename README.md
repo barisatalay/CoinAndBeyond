@@ -12,7 +12,18 @@ For now, no one :)
 
 ## Usage
 
-### Step 1
+### Step 1 (gradle.properties)
+```groovy
+....
+....
+
+android.useAndroidX=true
+android.enableJetifier=true
+```
+
+
+
+### Step 2
 ```groovy
 allprojects {
  repositories {
@@ -21,15 +32,16 @@ allprojects {
  }
 }
 ```
-### Step 2
+### Step 3
 
 Add dependencies in build.gradle.
 ```groovy
 dependencies {
+ implementation "androidx.appcompat:appcompat:1.0.2"
  implementation 'com.github.barisatalay:CoinAndBeyond:1.0.0'
 }
 ```
-### Step 3 (Use of library)
+### Step 4 (Use of library)
 ```kotlin
 //For Paribu market
 val myObject = CoinAndBeyond(Paribu(), this, this)

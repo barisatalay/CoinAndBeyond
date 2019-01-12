@@ -9,10 +9,10 @@ import com.barisatalay.cointracker.helper.UtilsNetwork
 import com.barisatalay.cointracker.service.model.enmCoin
 import com.barisatalay.cointracker.service.repository.ProjectRepository
 
-class CoinAndBeyond(private val dataset: IDataset, context: Context, private val owner: LifecycleOwner) {
+class CoinAndBeyond(private val dataset: IDataset) {
     private var coinFilters: Array<enmCoin> = arrayOf()
 
-    private var repository: ProjectRepository = UtilsNetwork.provideProjectRepository(context)
+    private var repository: ProjectRepository = UtilsNetwork.provideProjectRepository()
 
     init {
         repository.setHost(dataset.getBaseAddres())
@@ -23,14 +23,8 @@ class CoinAndBeyond(private val dataset: IDataset, context: Context, private val
      *
      * TODO  ENG: It will be fill another time
      * */
-    fun getCoins(observer: Observer<mdlCoinResponse>): CoinAndBeyond{
-        repository.coinFilters(coinFilters)
-        dataset.run(observer, owner)
 
-        return this
-    }
     fun getRepository(): ProjectRepository{
-
         return dataset.getRepository()
     }
     /**

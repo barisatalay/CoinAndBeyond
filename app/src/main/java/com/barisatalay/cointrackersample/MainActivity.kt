@@ -11,10 +11,10 @@ import com.barisatalay.cointracker.service.model.enmCoin
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(){
-    private val paribu = CoinAndBeyond(Paribu(), this, this)
-    private val koineks = CoinAndBeyond(Koineks(), this, this)
-    private val btcTurk = CoinAndBeyond(BtcTurk(), this, this)
-    private val sistemKoin = CoinAndBeyond(SistemKoin(), this, this)
+    private val paribu = CoinAndBeyond(Paribu())
+    private val koineks = CoinAndBeyond(Koineks())
+    private val btcTurk = CoinAndBeyond(BtcTurk())
+    private val sistemKoin = CoinAndBeyond(SistemKoin())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,36 +25,50 @@ class MainActivity : AppCompatActivity(){
         paribuBtn.setOnClickListener {
             showProgress()
             paribu.setCoinFilter(getSelectedCoins())
-            paribu.getCoins(Observer {response->
-                responseTxt.text = prepareCoinTexts(response)
-                hideProgress()
+            paribu.getRepository().GetKoineks(getSelectedCoins(), object : IResponse{
+                override fun onResponse(responseData: mdlCoinResponse) {
+                    responseTxt.text = prepareCoinTexts(responseData)
+                    hideProgress()
+                }
             })
         }
 
         koineksBtn.setOnClickListener {
             showProgress()
             koineks.setCoinFilter(getSelectedCoins())
-            koineks.getCoins(Observer {response->
-                responseTxt.text = prepareCoinTexts(response)
-                hideProgress()
+            koineks.getRepository().GetKoineks(getSelectedCoins(), object : IResponse{
+                override fun onResponse(responseData: mdlCoinResponse) {
+                    runOnUiThread {
+                        responseTxt.text = prepareCoinTexts(responseData)
+                        hideProgress()
+                    }
+                }
             })
         }
 
         btcturkBtn.setOnClickListener {
             showProgress()
             btcTurk.setCoinFilter(getSelectedCoins())
-            btcTurk.getCoins(Observer {response->
-                responseTxt.text = prepareCoinTexts(response)
-                hideProgress()
+            btcTurk.getRepository().GetKoineks(getSelectedCoins(), object : IResponse{
+                override fun onResponse(responseData: mdlCoinResponse) {
+                    runOnUiThread {
+                        responseTxt.text = prepareCoinTexts(responseData)
+                        hideProgress()
+                    }
+                }
             })
         }
 
         sistemKoinBtn.setOnClickListener {
             showProgress()
             sistemKoin.setCoinFilter(getSelectedCoins())
-            sistemKoin.getCoins(Observer {response->
-                responseTxt.text = prepareCoinTexts(response)
-                hideProgress()
+            sistemKoin.getRepository().GetKoineks(getSelectedCoins(), object : IResponse{
+                override fun onResponse(responseData: mdlCoinResponse) {
+                    runOnUiThread {
+                        responseTxt.text = prepareCoinTexts(responseData)
+                        hideProgress()
+                    }
+                }
             })
         }
     }

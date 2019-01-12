@@ -59,13 +59,11 @@ class UtilsNetwork {
         }
 
         private fun provideOkHttpClient(
-            mContext: Context,
             mDispatcher: Dispatcher,
             urlProviderInterceptor: UrlProviderInterceptor
         ): OkHttpClient {
             return OkHttpClient().newBuilder()
                 .addInterceptor(urlProviderInterceptor)
-                .addInterceptor(NetworkInterceptor(mContext))
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
@@ -85,12 +83,12 @@ class UtilsNetwork {
         private fun provideRestfulRequest(retrofit: Retrofit): RestfulRequest {
             return retrofit.create<RestfulRequest>(RestfulRequest::class.java)
         }
-        fun provideProjectRepository(context: Context): ProjectRepository {
+        fun provideProjectRepository(): ProjectRepository {
             val provideDispatcher = provideDispatcher()
 
             val provideUrlProvider = provideUrlProvider()
 
-            val provideOkHttpClient = provideOkHttpClient(context, provideDispatcher, provideUrlProvider)
+            val provideOkHttpClient = provideOkHttpClient(provideDispatcher, provideUrlProvider)
 
             val providesRetrofit = providesRetrofit(provideOkHttpClient, provideGson())
 

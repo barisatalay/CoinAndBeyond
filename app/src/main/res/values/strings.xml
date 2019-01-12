@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Coin Tracker Sample</string>
+    <string name="app_name">BitCoin ve Ötesi</string>
+    <string name="paribu">Paribu</string>
+    <string name="koineks">Koineks</string>
+    <string name="btc_t_rk">Btc Türk</string>
+    <string name="sistem_koin">Sistem Koin</string>
 </resources>

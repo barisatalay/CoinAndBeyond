@@ -4,7 +4,7 @@ import com.barisatalay.cointracker.service.model.enmCoin
 import com.barisatalay.cointracker.service.model.mdlCoin
 
 class mdlCoinResponse {
-    private var dataset = HashMap<enmCoin, ArrayList<mdlCoin>>()
+    var dataset = HashMap<enmCoin, ArrayList<mdlCoin>>()
 
     fun getCoinDetailFromType(type: enmCoin): ArrayList<mdlCoin>? {
         return dataset[type]

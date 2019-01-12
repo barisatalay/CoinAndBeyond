@@ -1,125 +1,94 @@
-package com.barisatalay.cointrackersample
+package com.barisatalay.bitcoinveotesi
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.barisatalay.bitcoinveotesi.core.model.Coin
+import com.barisatalay.bitcoinveotesi.ui.adapter.CoinAdapter
 import com.barisatalay.cointracker.CoinAndBeyond
-import com.barisatalay.cointracker.data.*
+import com.barisatalay.cointracker.data.Koineks
+import com.barisatalay.cointracker.data.Paribu
+import com.barisatalay.cointracker.data.mdlCoinResponse
 import com.barisatalay.cointracker.service.model.enmCoin
+import com.barisatalay.cointracker.service.model.mdlCoin
+import com.barisatalay.cointrackersample.R
+import com.barisatalay.cointrackersample.ui.viewmodel.CoinListViewModel
+import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
+    private val adapter = CoinAdapter(arrayListOf())
+
     private val paribu = CoinAndBeyond(Paribu())
+    private lateinit var paribuCoinDetail : HashMap<enmCoin, ArrayList<mdlCoin>>
+
     private val koineks = CoinAndBeyond(Koineks())
-    private val btcTurk = CoinAndBeyond(BtcTurk())
-    private val sistemKoin = CoinAndBeyond(SistemKoin())
+    private lateinit var koineksCoinDetail : HashMap<enmCoin, ArrayList<mdlCoin>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        hideLoading()
 
-        hideProgress()
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.orientation = RecyclerView.VERTICAL
+        coinList.layoutManager = linearLayoutManager
+        coinList.adapter = adapter
+        coinList.setHasFixedSize(true)
 
-        paribuBtn.setOnClickListener {
-            showProgress()
-            paribu.setCoinFilter(getSelectedCoins())
-            paribu.getRepository().GetKoineks(getSelectedCoins(), object : IResponse{
-                override fun onResponse(responseData: mdlCoinResponse) {
-                    responseTxt.text = prepareCoinTexts(responseData)
-                    hideProgress()
-                }
-            })
-        }
+        var currencyViewModel = ViewModelProviders.of(this).get(CoinListViewModel::class.java)
+        currencyViewModel.let { lifecycle.addObserver(it) }
 
-        koineksBtn.setOnClickListener {
-            showProgress()
-            koineks.setCoinFilter(getSelectedCoins())
-            koineks.getRepository().GetKoineks(getSelectedCoins(), object : IResponse{
-                override fun onResponse(responseData: mdlCoinResponse) {
-                    runOnUiThread {
-                        responseTxt.text = prepareCoinTexts(responseData)
-                        hideProgress()
+        currencyViewModel.loadCurrencyList().observe(this, Observer { currencyList ->
+            print(2)
+        })
+
+        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabReselected(p0: TabLayout.Tab?) {
+            }
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {
+            }
+
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+                showLoading()
+                when (p0?.position){
+                    0-> {
+                        adapter.setAll(prepareCoinToList(paribuCoinDetail))
                     }
-                }
-            })
-        }
-
-        btcturkBtn.setOnClickListener {
-            showProgress()
-            btcTurk.setCoinFilter(getSelectedCoins())
-            btcTurk.getRepository().GetKoineks(getSelectedCoins(), object : IResponse{
-                override fun onResponse(responseData: mdlCoinResponse) {
-                    runOnUiThread {
-                        responseTxt.text = prepareCoinTexts(responseData)
-                        hideProgress()
+                    1-> {
+                        adapter.setAll(prepareCoinToList(koineksCoinDetail))
                     }
-                }
-            })
-        }
 
-        sistemKoinBtn.setOnClickListener {
-            showProgress()
-            sistemKoin.setCoinFilter(getSelectedCoins())
-            sistemKoin.getRepository().GetKoineks(getSelectedCoins(), object : IResponse{
-                override fun onResponse(responseData: mdlCoinResponse) {
-                    runOnUiThread {
-                        responseTxt.text = prepareCoinTexts(responseData)
-                        hideProgress()
-                    }
                 }
-            })
-        }
+                hideLoading()
+            }
+        })
     }
 
-    private fun getSelectedCoins(): Array<enmCoin> {
-        val result: ArrayList<enmCoin> = arrayListOf()
 
-        if (btcChk.isChecked)
-            result.add(enmCoin.BTC)
-
-        if (xrpChk.isChecked)
-            result.add(enmCoin.XRP)
-
-        if (ethChk.isChecked)
-            result.add(enmCoin.ETH)
-
-
-        return result.toTypedArray()
+    private fun showLoading() {
+        progres_layout.visibility = View.VISIBLE
     }
 
-    private fun prepareCoinTexts(coinList: mdlCoinResponse): String {
-        val builder = StringBuilder()
+    private fun hideLoading() {
+        progres_layout.visibility = View.GONE
+    }
 
-        coinList.getCoinDetail().mapKeys {mapItem->
-            for (coinItem in mapItem.value) {
-                builder.append("${coinItem.description}(${mapItem.key.name}): ${coinItem.last} ${coinItem.currency.name}").append("\n")
+    private fun prepareCoinToList(source: HashMap<enmCoin, ArrayList<mdlCoin>>): ArrayList<Coin> {
+        val list = ArrayList<Coin>()
+
+        for(item in source){
+            if (!item.value.isEmpty()) {
+                list.add(Coin(0, item.key, item.value[0]))
             }
         }
-        Log.i("MainActivity","\n")
-        Log.i("MainActivity","****************************************************")
-        Log.i("MainActivity","$builder")
-        Log.i("MainActivity","****************************************************")
-        Log.i("MainActivity","\n")
-        return builder.toString()
+        return list
     }
 
-    private fun showProgress() {
-        progressBar.visibility = View.VISIBLE
-    }
 
-    private fun hideProgress() {
-        progressBar.visibility = View.GONE
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        koineks.cancelAllRequests()
-        paribu.cancelAllRequests()
-        btcTurk.cancelAllRequests()
-        sistemKoin.cancelAllRequests()
-
-        mdlCoinResponse()
-    }
 }

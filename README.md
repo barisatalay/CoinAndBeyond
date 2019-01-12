@@ -38,7 +38,7 @@ Add dependencies in build.gradle.
 ```groovy
 dependencies {
  implementation "androidx.appcompat:appcompat:1.0.2"
- implementation 'com.github.barisatalay:CoinAndBeyond:1.0.0'
+ implementation 'com.github.barisatalay:CoinAndBeyond:1.0.1'
 }
 ```
 ### Step 4 (Use of library)

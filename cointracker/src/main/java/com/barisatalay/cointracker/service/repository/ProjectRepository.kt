@@ -3,6 +3,7 @@ package com.barisatalay.cointracker.service.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.barisatalay.cointracker.data.IResponse
 import com.barisatalay.cointracker.data.mdlCoinResponse
 import com.barisatalay.cointracker.helper.BaseObserver
 import com.barisatalay.cointracker.helper.UrlProviderInterceptor
@@ -25,10 +26,7 @@ class ProjectRepository(
     private var coinFilters: Array<enmCoin> = arrayOf()
     private val gson: Gson = UtilsNetwork.provideGson()
 
-
-    fun GetParibu(coinTypes: Array<enmCoin>): LiveData<mdlCoinResponse>{
-        val data = MutableLiveData<mdlCoinResponse>()
-
+    fun GetParibu(coinTypes: Array<enmCoin>, listener: IResponse?){
         compositeDisposable.add(restfulRequest.GetParibu()
             .subscribeOn(scheduler)
             .observeOn(scheduler)
@@ -75,7 +73,10 @@ class ProjectRepository(
 
                     result.applyFilter(coinFilters)
 
-                    data.postValue(result)
+                    listener?.let {
+                        it.onResponse(result)
+                    }
+
                 }
 
                 override fun onResponseError(e: Throwable) {
@@ -83,12 +84,19 @@ class ProjectRepository(
                 }
 
             }))
+    }
+
+    internal fun GetParibu(coinTypes: Array<enmCoin>): LiveData<mdlCoinResponse>{
+        val data = MutableLiveData<mdlCoinResponse>()
+        GetParibu(coinTypes, object : IResponse{
+            override fun onResponse(responseData: mdlCoinResponse) {
+                data.postValue(responseData)
+            }
+        })
         return data
     }
 
-    fun GetKoineks(coinTypes: Array<enmCoin>): LiveData<mdlCoinResponse>{
-        val data = MutableLiveData<mdlCoinResponse>()
-
+    fun GetKoineks(coinTypes: Array<enmCoin>, listener: IResponse?){
         compositeDisposable.add(restfulRequest.GetKoineks()
             .subscribeOn(scheduler)
             .observeOn(scheduler)
@@ -99,7 +107,7 @@ class ProjectRepository(
 
                     if (coinTypes.isEmpty() || coinTypes.contains(enmCoin.BTC)) {
                         parsingModel.BTC?.let {
-//                            result.add(convertKoineksToCoin(it)!!)
+                            //                            result.add(convertKoineksToCoin(it)!!)
                             result.addCoinDetail(enmCoin.BTC, convertKoineksToCoin(it))
                         }
                     }
@@ -166,7 +174,8 @@ class ProjectRepository(
 
                     result.applyFilter(coinFilters)
 
-                    data.postValue(result)
+                    listener?.onResponse(result)
+//                    data.postValue(result)
                 }
 
                 override fun onResponseError(e: Throwable) {
@@ -174,12 +183,21 @@ class ProjectRepository(
                 }
 
             }))
+    }
+
+    internal fun GetKoineks(coinTypes: Array<enmCoin>): LiveData<mdlCoinResponse>{
+        val data = MutableLiveData<mdlCoinResponse>()
+
+        GetKoineks(coinTypes, object : IResponse{
+            override fun onResponse(responseData: mdlCoinResponse) {
+                data.postValue(responseData)
+            }
+        })
+
         return data
     }
 
-    fun GetBtcTurk(coinTypes: Array<enmCoin>): LiveData<mdlCoinResponse> {
-        val data = MutableLiveData<mdlCoinResponse>()
-
+    fun GetBtcTurk(coinTypes: Array<enmCoin>, listener: IResponse?){
         compositeDisposable.add(restfulRequest.GetBtcTurk()
             .subscribeOn(scheduler)
             .observeOn(scheduler)
@@ -195,7 +213,7 @@ class ProjectRepository(
                         }
                     }
                     result.applyFilter(coinFilters)
-                    data.postValue(result)
+                    listener?.onResponse(result)
                 }
 
                 override fun onResponseError(e: Throwable) {
@@ -203,12 +221,20 @@ class ProjectRepository(
                 }
 
             }))
+    }
+
+    internal fun GetBtcTurk(coinTypes: Array<enmCoin>): LiveData<mdlCoinResponse> {
+        val data = MutableLiveData<mdlCoinResponse>()
+
+        GetBtcTurk(coinTypes, object : IResponse{
+            override fun onResponse(responseData: mdlCoinResponse) {
+                data.postValue(responseData)
+            }
+        })
         return data
     }
 
-    fun GetSistemKoin(coinTypes: Array<enmCoin>): LiveData<mdlCoinResponse>  {
-        val data = MutableLiveData<mdlCoinResponse>()
-
+    fun GetSistemKoin(coinTypes: Array<enmCoin>, listener: IResponse?){
         compositeDisposable.add(restfulRequest.GetSistemKoin()
             .subscribeOn(scheduler)
             .observeOn(scheduler)
@@ -219,7 +245,7 @@ class ProjectRepository(
                     try {
                         sistemData = JSONObject(response).getJSONObject("data")
                     }catch (e : Exception){
-                        data.postValue(result)
+                        listener?.onResponse(result)
                         pushErrorMessageToLog("SistemKoin", e)
                         return
                     }
@@ -243,7 +269,7 @@ class ProjectRepository(
                     }
 
                     result.applyFilter(coinFilters)
-                    data.postValue(result)
+                    listener?.onResponse(result)
                 }
 
                 override fun onResponseError(e: Throwable) {
@@ -251,6 +277,17 @@ class ProjectRepository(
                 }
 
             }))
+    }
+
+    internal fun GetSistemKoin(coinTypes: Array<enmCoin>): LiveData<mdlCoinResponse>  {
+        val data = MutableLiveData<mdlCoinResponse>()
+
+        GetSistemKoin(coinTypes, object : IResponse{
+            override fun onResponse(responseData: mdlCoinResponse) {
+                data.postValue(responseData)
+            }
+
+        })
         return data
     }
 
@@ -334,7 +371,7 @@ class ProjectRepository(
         compositeDisposable.dispose()
     }
 
-    fun setHost(host: String) {
+    internal fun setHost(host: String) {
         if (lastHost.isEmpty() || !lastHost.equals(host, ignoreCase = true)){
             this.lastHost = host
             provideUrlProvider.setNewRestApi(host)
@@ -342,7 +379,7 @@ class ProjectRepository(
 
     }
 
-    fun coinFilters(coinFilters: Array<enmCoin>) {
+    internal fun coinFilters(coinFilters: Array<enmCoin>) {
         this.coinFilters = coinFilters
     }
 

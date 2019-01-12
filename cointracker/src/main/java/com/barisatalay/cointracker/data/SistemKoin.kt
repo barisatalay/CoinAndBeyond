@@ -50,4 +50,8 @@ class SistemKoin : IDataset {
             enmCoin.PIRL
         )
     }
+
+    override fun getRepository(): ProjectRepository {
+        return repository
+    }
 }

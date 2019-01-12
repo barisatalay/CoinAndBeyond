@@ -29,6 +29,10 @@ class CoinAndBeyond(private val dataset: IDataset, context: Context, private val
 
         return this
     }
+    fun getRepository(): ProjectRepository{
+
+        return dataset.getRepository()
+    }
     /**
      * TR: Activity vb. kapatılırken bu çalıştırılması tavsiye edilir. Websitelere gönderilen istekleri iptal eder.
      *

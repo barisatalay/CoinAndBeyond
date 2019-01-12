@@ -10,4 +10,5 @@ interface IDataset {
     fun getBaseAddres(): String
     fun setRepository(repository: ProjectRepository)
     fun run(observer: Observer<mdlCoinResponse>, owner: LifecycleOwner)
+    fun getRepository():ProjectRepository
 }

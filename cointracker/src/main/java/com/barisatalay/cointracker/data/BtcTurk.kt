@@ -30,4 +30,8 @@ class BtcTurk : IDataset {
     override fun run(observer: Observer<mdlCoinResponse>, owner: LifecycleOwner) {
         repository.GetBtcTurk(getAvailableCoins()).observe(owner, observer)
     }
+
+    override fun getRepository(): ProjectRepository {
+        return repository
+    }
 }

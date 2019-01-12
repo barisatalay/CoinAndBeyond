@@ -37,4 +37,8 @@ class Koineks : IDataset {
             enmCoin.ETC
         )
     }
+
+    override fun getRepository(): ProjectRepository {
+        return repository
+    }
 }

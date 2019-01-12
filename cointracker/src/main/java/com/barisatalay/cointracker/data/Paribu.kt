@@ -23,4 +23,8 @@ class Paribu : IDataset {
     override fun getAvailableCoins(): Array<enmCoin> {
         return arrayOf(enmCoin.BTC, enmCoin.XRP, enmCoin.ETH, enmCoin.XLM, enmCoin.ADA, enmCoin.LTC, enmCoin.EOS)
     }
+
+    override fun getRepository(): ProjectRepository {
+        return repository
+    }
 }

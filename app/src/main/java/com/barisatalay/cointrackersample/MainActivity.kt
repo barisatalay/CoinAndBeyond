@@ -1,4 +1,4 @@
-package com.barisatalay.bitcoinveotesi
+package com.barisatalay.cointrackersample
 
 import android.os.Bundle
 import android.view.View
@@ -7,15 +7,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.barisatalay.bitcoinveotesi.core.model.Coin
-import com.barisatalay.bitcoinveotesi.ui.adapter.CoinAdapter
 import com.barisatalay.cointracker.CoinAndBeyond
 import com.barisatalay.cointracker.data.Koineks
 import com.barisatalay.cointracker.data.Paribu
-import com.barisatalay.cointracker.data.mdlCoinResponse
 import com.barisatalay.cointracker.service.model.enmCoin
 import com.barisatalay.cointracker.service.model.mdlCoin
-import com.barisatalay.cointrackersample.R
+import com.barisatalay.cointrackersample.core.model.Coin
+import com.barisatalay.cointrackersample.ui.adapter.CoinAdapter
 import com.barisatalay.cointrackersample.ui.viewmodel.CoinListViewModel
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,10 +22,10 @@ class MainActivity : AppCompatActivity() {
     private val adapter = CoinAdapter(arrayListOf())
 
     private val paribu = CoinAndBeyond(Paribu())
-    private lateinit var paribuCoinDetail : HashMap<enmCoin, ArrayList<mdlCoin>>
+    private var paribuCoinDetail : HashMap<enmCoin, ArrayList<mdlCoin>> = hashMapOf()
 
     private val koineks = CoinAndBeyond(Koineks())
-    private lateinit var koineksCoinDetail : HashMap<enmCoin, ArrayList<mdlCoin>>
+    private var koineksCoinDetail : HashMap<enmCoin, ArrayList<mdlCoin>> = hashMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         coinList.adapter = adapter
         coinList.setHasFixedSize(true)
 
-        var currencyViewModel = ViewModelProviders.of(this).get(CoinListViewModel::class.java)
+        val currencyViewModel = ViewModelProviders.of(this).get(CoinListViewModel::class.java)
         currencyViewModel.let { lifecycle.addObserver(it) }
 
         currencyViewModel.loadCurrencyList().observe(this, Observer { currencyList ->
@@ -89,6 +87,4 @@ class MainActivity : AppCompatActivity() {
         }
         return list
     }
-
-
 }

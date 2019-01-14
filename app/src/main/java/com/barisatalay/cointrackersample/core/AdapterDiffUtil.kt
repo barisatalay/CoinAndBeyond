@@ -1,8 +1,8 @@
-package com.barisatalay.bitcoinveotesi.core
+package com.barisatalay.cointrackersample.core
 
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.DiffUtil
-import com.barisatalay.bitcoinveotesi.core.model.Coin
+import com.barisatalay.cointrackersample.core.model.Coin
 
 
 class AdapterDiffUtil(private val oldList:List<Coin>, private val newList:List<Coin>): DiffUtil.Callback() {

@@ -1,4 +1,4 @@
-package com.barisatalay.bitcoinveotesi.core.model
+package com.barisatalay.cointrackersample.core.model
 
 import com.barisatalay.cointracker.service.model.enmCoin
 import com.barisatalay.cointracker.service.model.mdlCoin

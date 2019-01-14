@@ -1,8 +1,8 @@
-package com.barisatalay.bitcoinveotesi.ui.holder
+package com.barisatalay.cointrackersample.ui.holder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.barisatalay.bitcoinveotesi.core.model.Coin
+import com.barisatalay.cointrackersample.core.model.Coin
 import kotlinx.android.synthetic.main.item_coin_header.view.*
 
 class CoinHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

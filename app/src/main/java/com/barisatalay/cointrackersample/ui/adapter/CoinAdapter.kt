@@ -1,11 +1,11 @@
-package com.barisatalay.bitcoinveotesi.ui.adapter
+package com.barisatalay.cointrackersample.ui.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.barisatalay.bitcoinveotesi.core.model.Coin
-import com.barisatalay.bitcoinveotesi.ui.holder.CoinHolder
 import android.view.LayoutInflater
 import com.barisatalay.cointrackersample.R
+import com.barisatalay.cointrackersample.core.model.Coin
+import com.barisatalay.cointrackersample.ui.holder.CoinHolder
 
 
 class CoinAdapter(private val coinHeaders: ArrayList<Coin>): RecyclerView.Adapter<CoinHolder>() {

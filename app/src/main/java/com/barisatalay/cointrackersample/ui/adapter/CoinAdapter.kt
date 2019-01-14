@@ -3,7 +3,9 @@ package com.barisatalay.cointrackersample.ui.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
+import androidx.recyclerview.widget.DiffUtil
 import com.barisatalay.cointrackersample.R
+import com.barisatalay.cointrackersample.core.AdapterDiffUtil
 import com.barisatalay.cointrackersample.core.model.Coin
 import com.barisatalay.cointrackersample.ui.holder.CoinHolder
 
@@ -24,11 +26,11 @@ class CoinAdapter(private val coinHeaders: ArrayList<Coin>): RecyclerView.Adapte
     }
 
     fun setAll(list: ArrayList<Coin>) {
-//        val noteDiffUtil = AdapterDiffUtil(coinHeaders, list)
-//        val diffResult = DiffUtil.calculateDiff(noteDiffUtil)
+        val noteDiffUtil = AdapterDiffUtil(coinHeaders, list)
+        val diffResult = DiffUtil.calculateDiff(noteDiffUtil)
         coinHeaders.clear()
         coinHeaders.addAll(list)
-        notifyDataSetChanged()
-//        diffResult.dispatchUpdatesTo(this)
+//        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 }

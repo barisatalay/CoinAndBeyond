@@ -1,26 +1,38 @@
 package com.barisatalay.cointrackersample.ui.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
 import com.barisatalay.cointracker.CoinAndBeyond
-import com.barisatalay.cointracker.data.Koineks
-import com.barisatalay.cointracker.data.mdlCoinResponse
-import javax.inject.Inject
-
-class CoinListViewModel(private var count: Int = 0) : ViewModel(), LifecycleObserver {
-
-    lateinit var projectListObservable: LiveData<mdlCoinResponse>
-    private val koineks = CoinAndBeyond(Koineks())
+import com.barisatalay.cointracker.data.*
 
 
-    init {
-        // If any transformation is needed, this can be simply done by Transformations class ...
-        projectListObservable = koineks.getRepository().GetKoineks(arrayOf())
+class CoinListViewModel : ViewModel(), IResponse{
+
+    private lateinit var coinAndBeyond: CoinAndBeyond
+    private val observableData = MutableLiveData<mdlCoinResponse>()
+
+    private fun prepareLiveData() {
+        when {
+            coinAndBeyond.getDataset() is Koineks -> coinAndBeyond.getRepository().GetKoineks(arrayOf(), this)
+            coinAndBeyond.getDataset() is Paribu -> coinAndBeyond.getRepository().GetParibu(arrayOf(), this)
+            coinAndBeyond.getDataset() is BtcTurk -> coinAndBeyond.getRepository().GetBtcTurk(arrayOf(), this)
+            coinAndBeyond.getDataset() is SistemKoin -> coinAndBeyond.getRepository().GetSistemKoin(arrayOf(), this)
+        }
     }
 
-    fun loadCurrencyList(): LiveData<mdlCoinResponse> {
-        projectListObservable = koineks.getRepository().GetKoineks(arrayOf())
-        return projectListObservable
+    override fun onResponse(responseData: mdlCoinResponse) {
+        observableData.postValue(responseData)
     }
+
+    fun getObservableData(): LiveData<mdlCoinResponse> {
+        return observableData
+    }
+
+    fun setObject(coinAndBeyond: CoinAndBeyond) {
+        this.coinAndBeyond = coinAndBeyond
+
+        prepareLiveData()
+    }
+
 
 }

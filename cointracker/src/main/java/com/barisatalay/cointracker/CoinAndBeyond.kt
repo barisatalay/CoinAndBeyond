@@ -1,10 +1,6 @@
 package com.barisatalay.cointracker
 
-import android.content.Context
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import com.barisatalay.cointracker.data.IDataset
-import com.barisatalay.cointracker.data.mdlCoinResponse
 import com.barisatalay.cointracker.helper.UtilsNetwork
 import com.barisatalay.cointracker.service.model.enmCoin
 import com.barisatalay.cointracker.service.repository.ProjectRepository
@@ -23,7 +19,6 @@ class CoinAndBeyond(private val dataset: IDataset) {
      *
      * TODO  ENG: It will be fill another time
      * */
-
     fun getRepository(): ProjectRepository{
         return dataset.getRepository()
     }
@@ -54,5 +49,9 @@ class CoinAndBeyond(private val dataset: IDataset) {
         this.coinFilters = coins
 
         return this
+    }
+
+    fun getDataset(): IDataset{
+        return dataset
     }
 }

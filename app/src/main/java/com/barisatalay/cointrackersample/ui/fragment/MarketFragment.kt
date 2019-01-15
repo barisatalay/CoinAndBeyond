@@ -2,6 +2,7 @@ package com.barisatalay.cointrackersample.ui.fragment
 
 import androidx.fragment.app.Fragment
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.ViewGroup
 import android.view.LayoutInflater
@@ -25,19 +26,14 @@ import kotlinx.android.synthetic.main.fragment_market.view.*
 class MarketFragment: Fragment() {
     private lateinit var dataset: IDataset
     private val adapter = CoinAdapter(arrayListOf())
-
-    companion object {
-        fun newInstance(): MarketFragment {
-            return MarketFragment()
-        }
-    }
+    private lateinit var viewModel: CoinListViewModel
 
     @Nullable
     override fun onCreateView(
         inflater: LayoutInflater, @Nullable container: ViewGroup?,
         @Nullable savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater!!.inflate(R.layout.fragment_market, container,false);
+        val view: View = inflater.inflate(R.layout.fragment_market, container,false);
 
         val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
@@ -51,17 +47,30 @@ class MarketFragment: Fragment() {
     override fun onActivityCreated(@Nullable savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val viewModel = ViewModelProviders.of(this).get(CoinListViewModel::class.java)
+        showLoading()
+
+        viewModel = ViewModelProviders.of(this).get(CoinListViewModel::class.java)
 
         viewModel.setObject(CoinAndBeyond(dataset))
 
         observeViewModel(viewModel)
+
+        reloadData()
+    }
+
+    private fun reloadData() {
+        Handler().postDelayed({
+            showLoading()
+            viewModel.refreshData()
+        }, 10000)
     }
 
     private fun observeViewModel(viewModel: CoinListViewModel) {
         viewModel.getObservableData().observe(this, Observer {
-            Log.i("FRAGMENT", "Data geldi")
+            Log.i("FRAGMENT", "${getTitle()} Data geldi")
+            hideLoading()
             adapter.setAll(prepareCoinToList(it.getCoinDetail()))
+            reloadData()
         })
     }
 
@@ -83,5 +92,13 @@ class MarketFragment: Fragment() {
 
     fun getTitle():String{
         return dataset.javaClass.simpleName
+    }
+
+    fun hideLoading(){
+        view?.progres_layout?.visibility = View.GONE
+    }
+
+    fun showLoading(){
+        view?.progres_layout?.visibility = View.VISIBLE
     }
 }

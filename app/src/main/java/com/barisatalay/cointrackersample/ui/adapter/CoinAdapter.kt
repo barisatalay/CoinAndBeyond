@@ -30,7 +30,6 @@ class CoinAdapter(private val coinHeaders: ArrayList<Coin>): RecyclerView.Adapte
         val diffResult = DiffUtil.calculateDiff(noteDiffUtil)
         coinHeaders.clear()
         coinHeaders.addAll(list)
-//        notifyDataSetChanged()
         diffResult.dispatchUpdatesTo(this)
     }
 }

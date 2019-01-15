@@ -96,10 +96,7 @@ class ProjectRepository(
         return data
     }
 
-    fun GetKoineks(coinTypes: Array<enmCoin>, listener: IResponse?): MutableLiveData<mdlCoinResponse> {
-
-        val data = MutableLiveData<mdlCoinResponse>()
-
+    fun GetKoineks(coinTypes: Array<enmCoin>, listener: IResponse?){
         compositeDisposable.add(restfulRequest.GetKoineks()
             .subscribeOn(scheduler)
             .observeOn(scheduler)
@@ -177,8 +174,9 @@ class ProjectRepository(
 
                     result.applyFilter(coinFilters)
 
-
-                    data.postValue(result)
+                    listener?.let {
+                        it.onResponse(result)
+                    }
 //                    data.postValue(result)
                 }
 
@@ -187,8 +185,6 @@ class ProjectRepository(
                 }
 
             }))
-        return data
-
     }
 
     fun GetKoineks(coinTypes: Array<enmCoin>): LiveData<mdlCoinResponse>{
@@ -219,7 +215,9 @@ class ProjectRepository(
                         }
                     }
                     result.applyFilter(coinFilters)
-                    listener?.onResponse(result)
+                    listener?.let {
+                        it.onResponse(result)
+                    }
                 }
 
                 override fun onResponseError(e: Throwable) {
@@ -275,7 +273,9 @@ class ProjectRepository(
                     }
 
                     result.applyFilter(coinFilters)
-                    listener?.onResponse(result)
+                    listener?.let {
+                        it.onResponse(result)
+                    }
                 }
 
                 override fun onResponseError(e: Throwable) {

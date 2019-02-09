@@ -13,7 +13,9 @@ class CoinListViewModel : ViewModel(), IResponse{
 
     fun refreshData() {
         when {
-            coinAndBeyond.getDataset() is Koineks -> coinAndBeyond.getRepository().GetKoineks(arrayOf(), this)
+            coinAndBeyond.getDataset() is Koineks -> {
+                coinAndBeyond.getCoins(Observer { t -> observableData.postValue(t) })
+            }
             coinAndBeyond.getDataset() is Paribu -> coinAndBeyond.getRepository().GetParibu(arrayOf(), this)
             coinAndBeyond.getDataset() is BtcTurk -> coinAndBeyond.getRepository().GetBtcTurk(arrayOf(), this)
             coinAndBeyond.getDataset() is SistemKoin -> coinAndBeyond.getRepository().GetSistemKoin(arrayOf(), this)

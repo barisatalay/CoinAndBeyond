@@ -1,24 +1,43 @@
 package com.barisatalay.cointracker
 
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.barisatalay.cointracker.data.IDataset
+import com.barisatalay.cointracker.data.mdlCoinResponse
 import com.barisatalay.cointracker.helper.UtilsNetwork
 import com.barisatalay.cointracker.service.model.enmCoin
 import com.barisatalay.cointracker.service.repository.ProjectRepository
 
-class CoinAndBeyond(private val dataset: IDataset) {
+class CoinAndBeyond(prmDataset: IDataset) {
     private var coinFilters: Array<enmCoin> = arrayOf()
+    private var dataset: IDataset
+    private lateinit var owner: LifecycleOwner
 
     private var repository: ProjectRepository = UtilsNetwork.provideProjectRepository()
 
     init {
+        this.dataset = prmDataset
         repository.setHost(dataset.getBaseAddres())
         dataset.setRepository(repository)
+    }
+
+    constructor(prmDataset: IDataset, prmOwner: LifecycleOwner) : this(prmDataset) {
+        this.dataset = prmDataset
+        this.owner = prmOwner
     }
     /**
      * TODO  TR: Daha sonra doldurulacak
      *
      * TODO  ENG: It will be fill another time
      * */
+    fun getCoins(observer: Observer<mdlCoinResponse>): CoinAndBeyond{
+        repository.coinFilters(coinFilters)
+        dataset.run(observer, owner)
+
+        return this
+    }
+
+
     fun getRepository(): ProjectRepository{
         return dataset.getRepository()
     }

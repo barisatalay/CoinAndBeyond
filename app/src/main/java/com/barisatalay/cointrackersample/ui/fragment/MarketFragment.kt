@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.barisatalay.cointracker.CoinAndBeyond
 import com.barisatalay.cointracker.data.IDataset
+import com.barisatalay.cointracker.data.Koineks
 import com.barisatalay.cointracker.service.model.enmCoin
 import com.barisatalay.cointracker.service.model.mdlCoin
 import com.barisatalay.cointrackersample.R
@@ -50,8 +51,11 @@ class MarketFragment: Fragment() {
         showLoading()
 
         viewModel = ViewModelProviders.of(this).get(CoinListViewModel::class.java)
-
-        viewModel.setObject(CoinAndBeyond(dataset))
+        if (dataset is Koineks)
+            //For example
+            viewModel.setObject(CoinAndBeyond(dataset, this))
+        else
+            viewModel.setObject(CoinAndBeyond(dataset))
 
         observeViewModel(viewModel)
 

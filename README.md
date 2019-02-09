@@ -41,16 +41,16 @@ dependencies {
  implementation 'com.github.barisatalay:CoinAndBeyond:1.0.1'
 }
 ```
-### Step 4 (Use of library)
+### Step 4 (Use of library for AndroidX)
 ```kotlin
 //For Paribu market
-val myObject = CoinAndBeyond(Paribu(), this, this)
+val myObject = CoinAndBeyond(Paribu(), this)
 //For Koineks market
-val myObject = CoinAndBeyond(Koineks(), this, this)
+val myObject = CoinAndBeyond(Koineks(), this)
 //For BtcTurk market
-val myObject = CoinAndBeyond(BtcTurk(), this, this)
+val myObject = CoinAndBeyond(BtcTurk(), this)
 //For Sistem Koin market
-val myObject = CoinAndBeyond(SistemKoin(), this, this)
+val myObject = CoinAndBeyond(SistemKoin(), this)
 
 //The coin list that will be returned from the "getCoins" method is filtered according to the list you provided here.
 //NOTE: If you submit a blank list, they are all listed.

@@ -1,4 +1,12 @@
+[![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-CoinAndBeyond-green.svg?style=flat )]( https://android-arsenal.com/details/1/7753 )
 [![](https://jitpack.io/v/barisatalay/CoinAndBeyond.svg)](https://jitpack.io/#barisatalay/CoinAndBeyond)
+<a href="https://opensource.org/licenses/MIT"><img alt="License" src="https://img.shields.io/badge/License-MIT-blue.svg"/></a>
+![](https://img.shields.io/github/languages/count/barisatalay/CoinAndBeyond.svg)
+![](https://img.shields.io/github/repo-size/barisatalay/CoinAndBeyond.svg)
+![](https://img.shields.io/github/last-commit/barisatalay/CoinAndBeyond.svg)
+![](https://img.shields.io/github/followers/barisatalay.svg?style=social)
+![](https://img.shields.io/github/stars/barisatalay/CoinAndBeyond.svg?style=social)
+
 
 # CoinAndBeyond
 Turkish Bitcoin stock market library
